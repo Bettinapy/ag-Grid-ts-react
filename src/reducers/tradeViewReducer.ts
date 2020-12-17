@@ -1,3 +1,5 @@
+import { parseDataSource } from "../utils/dataFormatter";
+
 interface IState {
     isPivot: boolean,
     tradeViewMetadata: any | null,
@@ -42,7 +44,10 @@ interface IState {
       debugger;
     switch (action.type) {
       case 'FETCH_TRADE_META_DATA_TRIGGER': 
-      case 'FETCH_TRADE_META_DATA': {
+      case 'FETCH_TRADE_DATA_TRIGGER': {
+        return { ...state, loading: true };
+      }
+      case 'FETCH_TRADE_META_DATA_SUCCESS': {
         const { response, requestPayload } = action.payload;
         const { destinationObject } = requestPayload
         const tradeViewMetadata = response.uiExtensionMetadata.find((item: any) => item["destinationClassName"] === destinationObject);
@@ -56,6 +61,35 @@ interface IState {
             loading: false,
             tradeViewMetadata,
             pinnedBottomRow
+        }
+      }
+      case 'FETCH_TRADE_DATA_SUCCESS': {
+        const { response } = action.payload;
+        const { columnTypesMap, groupedColumns, aggColumns=[] } = action.payload.requestPayload;
+        const tradeViewData = parseDataSource(response, columnTypesMap || state.dataTypesMap)
+        debugger;
+        return {
+          ...state,
+          loading: false,
+          tradeViewData,
+          groupedColumns,
+          aggColumns,
+          ...(columnTypesMap && {dataTypesMap: 
+            {...columnTypesMap}})
+        }
+      }
+      case 'FETCH_TRADE_DATA_ERROR': {
+        return {
+          ...state,
+          loading: false
+        }
+      }
+      case 'SET_UPDATED_IDS': {
+        const { updatedIds } = action.payload;
+        debugger;
+        return {
+          ...state,
+          updatedIds
         }
       }
       default:

@@ -1,4 +1,4 @@
-import { tradeMetaDataFetch } from '../actions/entityActions'
+import { tradeMetaDataFetch, tradeDataFetch } from '../actions/entityActions'
 import {fetchEntity} from './generics';
 import * as api from '../api';
 
@@ -13,15 +13,15 @@ export function* fetchTradeMetaData(action: any) {
   );
 }
 
-// export function* fetchTradeData(action: any) {
-//   const { request } = action.payload;
-//   const response = yield fetchEntity(
-//     tradeDataFetch,
-//     api.getItems,
-//     [request],
-//     action
-//   );
-// }
+export function* fetchTradeData(action: any) {
+  const { request } = action.payload;
+  const response = yield fetchEntity(
+    tradeDataFetch,
+    api.getItems,
+    [request],
+    action
+  );
+}
 
 // export function* fetchTradeFilterColumnValues(action: any) {
 //   const { columnNames, destinationObject } = action.payload;

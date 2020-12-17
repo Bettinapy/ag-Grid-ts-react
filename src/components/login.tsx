@@ -75,6 +75,7 @@ interface IState {
               }
             ]
           })
+          console.log('screens', screens);
     
           /**
            * Yuan:

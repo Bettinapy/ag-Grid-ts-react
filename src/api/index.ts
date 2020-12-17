@@ -4,10 +4,25 @@ const getToken = (token: string, addBearer: boolean) => {
   const tokens = localStorage.getItem('tokens');
   const tokenValue = JSON.parse(tokens || '')[token];
   debugger;
+  console.log("get tokenValue ", `Bearer ${tokenValue}`)
   return addBearer ? `Bearer ${tokenValue}` : tokenValue;
 }
 
 const BASE_URL = process.env.REACT_APP_BASE_URL || 'https://hydra.transcendstreet.com:8768';
+
+export const getItems = (data: any) => {
+    debugger;
+    console.log("data ", data);
+    return axios({
+      url: `${BASE_URL}/request-service/query_request`,
+      method: 'post',
+      data,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': getToken('accessToken', true)
+      }
+    })
+  }
 
 const nonAuthorizedHeader = {
     'Content-Type': 'application/json'
